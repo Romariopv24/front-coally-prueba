@@ -22,21 +22,25 @@ export const Register = () => {
 
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  
   const navigate = useNavigate()
 
 
   const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setIsLoading(true)
     try {
       const res = await axiosPost("register", registerData)
-      console.log(res)
       if(res.status === 200){
         toast.success("Registro exitoso")
         navigate(rootRouters.home.login)
+        setIsLoading(false)
       }
     } catch (error: any) {
       console.log(error.response.data.errors)
       error.response.data.errors.map((err: string) => toast.error(err))
+      setIsLoading(false)
     }
 
   }
@@ -74,7 +78,7 @@ export const Register = () => {
             </div>
             <div className="grid gap-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">Contraseña</Label>
                 <button type="button" onClick={() => setShowPassword(!showPassword)}>
                   {showPassword ?  eyeSlash : eye }
                 </button>
@@ -85,7 +89,7 @@ export const Register = () => {
             </div>
             <div className="grid gap-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Label htmlFor="confirmPassword">Confirmar Contraseña</Label>
                 <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
                   {showConfirmPassword ?  eyeSlash : eye }
                 </button>
@@ -94,8 +98,8 @@ export const Register = () => {
               onChange={(e) => setRegisterData({...registerData, confirmPassword: e.target.value})}
               />
             </div>
-            <Button type="submit" className="w-full">
-              Register
+            <Button disabled={isLoading} type="submit" className="w-full">
+              Registrarse
             </Button>
            
           </div>
