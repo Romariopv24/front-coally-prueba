@@ -5,11 +5,10 @@ import { Register } from "./views/Auth/Register"
 import { RootState } from "./store/store"
 import { useAppSelector } from "./app/hooks/reduxHooks"
 import { Dashboard } from "./views/dashboard/Dashboard"
+import { getInLS } from "./app/utils/local-storage-manager"
 
 function App() {
-  const { token } = useAppSelector((state: RootState) => state.auth)
-
-  console.log(token)
+  const token = getInLS("token")
 
   return (
     <Routes>

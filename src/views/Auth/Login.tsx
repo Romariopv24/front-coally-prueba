@@ -12,6 +12,7 @@ import { Link, useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
 import { useDispatch } from 'react-redux'
 import { authActions } from '@/store/slice/auth.slice'
+import { saveInLS } from '@/app/utils/local-storage-manager'
 
 export const Login = () => {
   const [loginData, setLoginData] = useState({
@@ -34,6 +35,9 @@ export const Login = () => {
         dispatch(authActions.setAuthData(res.data))
         setIsLoading(false)
         navigate(rootRouters.dashboard.index)
+        const token = res.data.token
+        if(!token)  return
+        saveInLS("token", token)
       }
     } catch (error: any) {
       console.log(error.response.data.errors)
